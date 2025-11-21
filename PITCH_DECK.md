@@ -248,8 +248,8 @@ A production-ready, enterprise-grade WhatsApp-based digital lending platform tha
 **Advanced Capabilities**
 - Voice message support
 - Video KYC integration
-- Blockchain for document verification
-- AI-powered financial advisory
+- Intelligent Automation & Decisioning (automated underwriting, instant approvals, real-time risk assessment)
+- AI-powered financial advisory and personalized product recommendations
 
 ### Business Impact Projection
 

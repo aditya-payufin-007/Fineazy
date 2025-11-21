@@ -1,0 +1,109 @@
+graph TB
+    subgraph "Client Layer"
+        USER[👤 End User<br/>WhatsApp Mobile App<br/>2.5B+ Global Users]
+    end
+
+    subgraph "Meta WhatsApp Business Cloud"
+        META_API[📱 Meta WhatsApp Business API<br/>Graph API v18.0<br/>Enterprise Messaging Infrastructure]
+        WEBHOOK_META[🔔 Meta Webhook Service<br/>Event Distribution<br/>Message Routing]
+    end
+
+    subgraph "Application Gateway & API Layer"
+        LB[⚖️ Load Balancer<br/>AWS ALB / Nginx<br/>SSL Termination]
+        WEBHOOK_CTRL[🎯 WebhookController<br/>REST API Endpoint<br/>POST /webhook<br/>GET /webhook/health]
+        MSG_PARSER[📝 MessageParser<br/>JSON Deserialization<br/>Context Extraction]
+    end
+
+    subgraph "AI & Natural Language Processing Layer"
+        NLP_ENGINE[🤖 AI/NLP Engine<br/>Intent Recognition<br/>Entity Extraction<br/>Sentiment Analysis]
+        QUERY_UNDERSTANDER[🧠 Query Understanding Service<br/>Natural Language Understanding<br/>Contextual Analysis<br/>Intent Classification]
+        RESPONSE_GENERATOR[💬 Natural Response Generator<br/>Human-Readable Formatting<br/>Contextual Response Building<br/>Personalization Engine]
+    end
+
+    subgraph "Business Logic & Orchestration Layer"
+        MSG_SERVICE[📨 WhatsAppMessageService<br/>Message Orchestration<br/>Session Management<br/>State Coordination]
+        MSG_PROCESSOR[⚙️ MessageProcessorService<br/>Stage Resolution<br/>Workflow Routing<br/>Processor Registry]
+        LENDING_WORKFLOW[🏦 LendingWorkflowService<br/>State Machine Engine<br/>11-Stage Workflow<br/>Business Rule Engine]
+        STAGE_PROCESSORS[🔀 Stage Processors<br/>OnboardingProcessor<br/>KYCProcessor<br/>EligibilityProcessor<br/>OfferProcessor<br/>DisbursalProcessor<br/>PostDisbursalProcessor]
+    end
+
+    subgraph "Data & Persistence Layer"
+        USER_REPO[(👤 UserDetailsRepository<br/>User Profile<br/>Application Tracking<br/>Stage Management)]
+        MSG_REPO[(💬 MessageRepository<br/>Message History<br/>Audit Trail<br/>Compliance Logging)]
+        CHAT_REPO[(📋 ChatHistoryRepository<br/>Conversation Context<br/>Session Data<br/>Analytics)]
+        CONFIG_REPO[(⚙️ ConfigPropertyRepository<br/>Dynamic Configuration<br/>Feature Flags<br/>Business Rules)]
+    end
+
+    subgraph "External Integrations & Services"
+        CREDIT_BUREAU[📊 Credit Bureau API<br/>CIBIL / Experian / Equifax<br/>Real-time Credit Checks<br/>Risk Assessment]
+        CORE_BANKING[🏛️ Core Banking System<br/>Account Management<br/>Transaction Processing<br/>Loan Disbursal]
+        PAYMENT_GW[💳 Payment Gateway<br/>UPI / NEFT / RTGS<br/>Payment Processing<br/>Transaction Verification]
+        DOC_VERIFY[📄 Document Verification Service<br/>OCR Processing<br/>KYC Validation<br/>Compliance Checks]
+    end
+
+    subgraph "Response & Delivery Layer"
+        RESPONSE_BUILDER[📤 Response Builder<br/>Message Formatting<br/>Template Engine<br/>Rich Media Support]
+        WHATSAPP_CLIENT[📱 WhatsAppApiClient<br/>Graph API Integration<br/>Message Delivery<br/>Read Receipts]
+    end
+
+    %% User Flow
+    USER -->|"1. Sends Message<br/>Text/Media/Commands"| META_API
+    META_API -->|"2. Webhook Event<br/>HTTPS POST<br/>JSON Payload"| WEBHOOK_META
+    WEBHOOK_META -->|"3. Webhook Callback<br/>Event Notification"| LB
+    LB -->|"4. Route Request<br/>Load Distribution"| WEBHOOK_CTRL
+    WEBHOOK_CTRL -->|"5. Parse Payload<br/>Extract Message Data"| MSG_PARSER
+    MSG_PARSER -->|"6. Message Context<br/>Structured Data"| MSG_SERVICE
+
+    %% AI/NLP Processing Flow
+    MSG_SERVICE -->|"7. Raw User Input<br/>Unstructured Text"| NLP_ENGINE
+    NLP_ENGINE -->|"8. Intent & Entities<br/>Structured Understanding"| QUERY_UNDERSTANDER
+    QUERY_UNDERSTANDER -->|"9. Contextual Query<br/>Enriched with Intent"| MSG_PROCESSOR
+
+    %% Business Logic Flow
+    MSG_PROCESSOR -->|"10. Resolve Current Stage<br/>State Machine Lookup"| LENDING_WORKFLOW
+    LENDING_WORKFLOW -->|"11. Route to Stage Processor<br/>Business Logic Execution"| STAGE_PROCESSORS
+    STAGE_PROCESSORS -->|"12. Process Business Rules<br/>Validate Input<br/>Update State"| LENDING_WORKFLOW
+
+    %% Data Access Flow
+    MSG_SERVICE -->|"13. Persist Message<br/>Audit Trail"| MSG_REPO
+    MSG_SERVICE -->|"14. Save Chat History<br/>Session Context"| CHAT_REPO
+    MSG_PROCESSOR -->|"15. Fetch User State<br/>Application Status"| USER_REPO
+    LENDING_WORKFLOW -->|"16. Update User Stage<br/>Persist State Changes"| USER_REPO
+    STAGE_PROCESSORS -->|"17. Load Configuration<br/>Business Rules"| CONFIG_REPO
+
+    %% External Service Integration
+    STAGE_PROCESSORS -.->|"18. Credit Check<br/>Eligibility Assessment"| CREDIT_BUREAU
+    STAGE_PROCESSORS -.->|"19. Account Verification<br/>Disbursal Processing"| CORE_BANKING
+    STAGE_PROCESSORS -.->|"20. Payment Processing<br/>Transaction Handling"| PAYMENT_GW
+    STAGE_PROCESSORS -.->|"21. Document Verification<br/>KYC Processing"| DOC_VERIFY
+
+    %% Response Generation Flow
+    STAGE_PROCESSORS -->|"22. Business Data<br/>Structured Response Data"| RESPONSE_GENERATOR
+    RESPONSE_GENERATOR -->|"23. Natural Language<br/>Human-Readable Format"| RESPONSE_BUILDER
+    RESPONSE_BUILDER -->|"24. Formatted Message<br/>Template Applied"| WHATSAPP_CLIENT
+    WHATSAPP_CLIENT -->|"25. Graph API Call<br/>Message Delivery"| META_API
+    META_API -->|"26. Deliver to User<br/>WhatsApp Notification"| USER
+
+    %% Feedback Loop
+    USER_REPO -.->|"27. State Persistence<br/>Session Continuity"| MSG_PROCESSOR
+    CHAT_REPO -.->|"28. Context Retrieval<br/>Conversation History"| NLP_ENGINE
+
+    %% Styling
+    classDef userLayer fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef metaLayer fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef apiLayer fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef aiLayer fill:#f3e5f5,stroke:#6a1b9a,stroke-width:3px
+    classDef businessLayer fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    classDef dataLayer fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef externalLayer fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+    classDef responseLayer fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+
+    class USER userLayer
+    class META_API,WEBHOOK_META metaLayer
+    class LB,WEBHOOK_CTRL,MSG_PARSER apiLayer
+    class NLP_ENGINE,QUERY_UNDERSTANDER,RESPONSE_GENERATOR aiLayer
+    class MSG_SERVICE,MSG_PROCESSOR,LENDING_WORKFLOW,STAGE_PROCESSORS businessLayer
+    class USER_REPO,MSG_REPO,CHAT_REPO,CONFIG_REPO dataLayer
+    class CREDIT_BUREAU,CORE_BANKING,PAYMENT_GW,DOC_VERIFY externalLayer
+    class RESPONSE_BUILDER,WHATSAPP_CLIENT responseLayer
+
