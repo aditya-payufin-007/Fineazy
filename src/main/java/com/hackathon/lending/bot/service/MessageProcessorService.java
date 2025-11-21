@@ -67,11 +67,11 @@ public class MessageProcessorService {
         ApplicationStages currentStage = resolveCurrentStage(request);
         ApplicationStages nextStage = ApplicationStages.nextStage(currentStage);
 
-        if(currentStage==ApplicationStages.ONBOARDING_IN_PROGRESS){
-            nextStage = ApplicationStages.ONBOARDING_IN_PROGRESS;
-        }
+//        if(currentStage==ApplicationStages.ONBOARDING_IN_PROGRESS){
+//            nextStage = ApplicationStages.ONBOARDING_IN_PROGRESS;
+//        }
 
-        StageMessageProcessor processor = stageProcessorRegistry.getOrDefault(nextStage.getStageType(),
+        StageMessageProcessor processor = stageProcessorRegistry.getOrDefault(currentStage.getStageType(),
                 defaultStageProcessor);
 
         String response = processor.process(request, nextStage);
