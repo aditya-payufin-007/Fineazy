@@ -78,7 +78,7 @@ public class MessageProcessorService {
         if (!StringUtils.hasText(response)) {
             response = defaultStageProcessor.process(request, nextStage);
         }
-        updateUserStage(request.getUserDetails(), nextStage);
+//        updateUserStage(request.getUserDetails(), nextStage);
         return response;
     }
 
