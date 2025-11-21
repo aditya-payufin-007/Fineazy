@@ -66,6 +66,11 @@ public class MessageProcessorService {
     private String generateResponseBasedOnIncomingMessage(MessageProcessorRequestDTO request) {
         ApplicationStages currentStage = resolveCurrentStage(request);
         ApplicationStages nextStage = ApplicationStages.nextStage(currentStage);
+
+        if(currentStage==ApplicationStages.ONBOARDING_IN_PROGRESS){
+            nextStage = ApplicationStages.ONBOARDING_IN_PROGRESS;
+        }
+
         StageMessageProcessor processor = stageProcessorRegistry.getOrDefault(nextStage.getStageType(),
                 defaultStageProcessor);
 
