@@ -1,0 +1,70 @@
+# Toqan AI Agent Configuration Example
+# Copy this file to application.properties and update with your actual values
+
+# =============================================================================
+# TOQAN AI AGENT CONFIGURATION
+# =============================================================================
+
+# Toqan API Base URL (Production)
+toqan.api.base-url=https://api.coco.prod.toqan.ai
+
+# Your Toqan API Key (REQUIRED)
+# Get this from your Toqan Space settings
+# IMPORTANT: Keep this secure and never commit to version control
+toqan.api.key=YOUR_TOQAN_API_KEY_HERE
+
+# Request timeout in seconds (default: 30)
+# Increase if requests are timing out
+toqan.api.timeout=30
+
+# =============================================================================
+# POLLING CONFIGURATION
+# =============================================================================
+
+# Maximum number of polling attempts (default: 20)
+# Each attempt waits for toqan.polling.interval-ms milliseconds
+# Total max wait time = max-attempts * interval-ms
+# Example: 20 attempts * 2000ms = 40 seconds max wait
+toqan.polling.max-attempts=20
+
+# Interval between polling attempts in milliseconds (default: 2000)
+# Lower values = more responsive but more API calls
+# Higher values = less API calls but slower response
+toqan.polling.interval-ms=2000
+
+# =============================================================================
+# LOGGING CONFIGURATION (Optional)
+# =============================================================================
+
+# Enable DEBUG logging for Toqan AI Agent module
+# Useful for troubleshooting
+logging.level.com.hackathon.lending.bot.aiagent=DEBUG
+
+# =============================================================================
+# NOTES
+# =============================================================================
+# 
+# 1. API Key Security:
+#    - In production, use environment variables instead of hardcoding
+#    - Example: toqan.api.key=${TOQAN_API_KEY}
+#    - Set via: export TOQAN_API_KEY=your_actual_key
+#
+# 2. Rate Limits:
+#    - Toqan API has rate limits
+#    - Monitor for 429 (Rate Limit Exceeded) errors
+#    - Implement appropriate retry logic in your application
+#
+# 3. URL Expiration:
+#    - URLs in requests/responses may expire after 30 days
+#
+# 4. Timeout Calculation:
+#    - Total max wait time = max-attempts * interval-ms / 1000 seconds
+#    - Default: 20 * 2000 / 1000 = 40 seconds
+#    - Adjust based on your use case
+#
+# 5. Testing:
+#    - Use the health endpoint to verify configuration: /api/aiagent/health
+#    - Import Postman collection: Toqan_AI_Agent_API.postman_collection.json
+#
+# =============================================================================
+

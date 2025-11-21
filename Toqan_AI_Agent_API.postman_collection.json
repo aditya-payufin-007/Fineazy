@@ -1,0 +1,167 @@
+{
+  "info": {
+    "_postman_id": "toqan-ai-agent-collection",
+    "name": "Toqan AI Agent API Collection",
+    "description": "Collection for testing Toqan AI Agent integration endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:8902/chatbot/api/aiagent/health",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8902",
+          "path": ["chatbot", "api", "aiagent", "health"]
+        },
+        "description": "Check if the AI Agent service is running"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Conversation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_message\": \"Hello, I need assistance with a business loan!\",\n  \"private_user_files\": []\n}"
+        },
+        "url": {
+          "raw": "https://localhost:8902/chatbot/api/aiagent/conversation",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8902",
+          "path": ["chatbot", "api", "aiagent", "conversation"]
+        },
+        "description": "Create a new conversation with the AI agent"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Answer",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://localhost:8902/chatbot/api/aiagent/answer?conversation_id={{conversation_id}}&request_id={{request_id}}",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8902",
+          "path": ["chatbot", "api", "aiagent", "answer"],
+          "query": [
+            {
+              "key": "conversation_id",
+              "value": "{{conversation_id}}",
+              "description": "Conversation ID from create conversation response"
+            },
+            {
+              "key": "request_id",
+              "value": "{{request_id}}",
+              "description": "Request ID from create conversation response"
+            }
+          ]
+        },
+        "description": "Get the answer for a specific conversation and request"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Conversation and Get Answer (Sync)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_message\": \"What are the interest rates for business loans?\",\n  \"private_user_files\": []\n}"
+        },
+        "url": {
+          "raw": "https://localhost:8902/chatbot/api/aiagent/conversation/sync",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8902",
+          "path": ["chatbot", "api", "aiagent", "conversation", "sync"]
+        },
+        "description": "Create a conversation and wait synchronously for the answer"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Conversation (Async)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_message\": \"Calculate my loan eligibility\",\n  \"private_user_files\": []\n}"
+        },
+        "url": {
+          "raw": "https://localhost:8902/chatbot/api/aiagent/conversation/async",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8902",
+          "path": ["chatbot", "api", "aiagent", "conversation", "async"]
+        },
+        "description": "Create a conversation asynchronously and return conversation/request IDs immediately"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Conversation with Files",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"user_message\": \"Analyze my financial documents\",\n  \"private_user_files\": [\n    {\n      \"name\": \"financial_statement.pdf\",\n      \"url\": \"https://example.com/files/statement.pdf\",\n      \"mimeType\": \"application/pdf\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "https://localhost:8902/chatbot/api/aiagent/conversation",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8902",
+          "path": ["chatbot", "api", "aiagent", "conversation"]
+        },
+        "description": "Create a conversation with file attachments"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "conversation_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "request_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
+
