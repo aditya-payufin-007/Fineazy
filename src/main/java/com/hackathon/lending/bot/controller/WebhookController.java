@@ -57,16 +57,22 @@ public class WebhookController {
     @PostMapping
     public ResponseEntity<String> receiveMessage(@RequestBody String requestString) {
         try {
-            logger.info("Received webhook: {}", requestString);
+            logger.info("Received webhook payload: {}", requestString);
 
             WhatsAppWebhookRequest request = objectMapper.readValue(requestString, WhatsAppWebhookRequest.class);
-            
-            logger.info("The reuqest after parsing is : {}",request);
+
+            logger.info("Webhook payload summary: {}", request);
 
             // Parse the message
             MessageContext context = MessageParser.parseWebhookMessage(request);
 
             if (context != null) {
+                logger.info(
+                        "Scheduling processing for messageId={} from={} body=\"{}\"",
+                        context.getMessageId(),
+                        context.getFrom(),
+                        context.getMessageBody()
+                );
                 // Process the message asynchronously
                 new Thread(() -> whatsAppMessageService.processIncomingMessage(context)).start();
             } else {

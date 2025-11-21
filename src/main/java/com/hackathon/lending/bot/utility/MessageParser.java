@@ -2,18 +2,36 @@ package com.hackathon.lending.bot.utility;
 
 import com.hackathon.lending.bot.dto.MessageContext;
 import com.hackathon.lending.bot.dto.WhatsAppWebhookRequest;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MessageParser {
+
+    private static final Logger logger = LoggerFactory.getLogger(MessageParser.class);
 
     /**
      * Parse WhatsApp webhook request and extract message context
      */
     public static MessageContext parseWebhookMessage(WhatsAppWebhookRequest request) {
-        if (request == null || request.getMessages() == null || request.getMessages().isEmpty()) {
+        if (request == null) {
+            logger.warn("Webhook request is null");
             return null;
         }
 
-        WhatsAppWebhookRequest.WhatsAppMessage message = request.getMessages().get(0);
+        WhatsAppWebhookRequest.Value value = request.getFirstValue();
+        if (value == null) {
+            logger.warn("Webhook payload missing entry/change/value nodes");
+            return null;
+        }
+
+        List<WhatsAppWebhookRequest.WhatsAppMessage> messages = value.getMessages();
+        if (messages == null || messages.isEmpty()) {
+            logger.warn("Webhook payload does not include messages");
+            return null;
+        }
+
+        WhatsAppWebhookRequest.WhatsAppMessage message = messages.get(0);
 
         String userName = "";
         String from = message.getFrom();
@@ -22,15 +40,15 @@ public class MessageParser {
         String timestamp = message.getTimestamp();
         String messageBody = extractMessageBody(message);
 
-        // Get userName from contacts if present
-        if (request.getContacts() != null && !request.getContacts().isEmpty()) {
-            WhatsAppWebhookRequest.Contact contact = request.getContacts().get(0);
+        List<WhatsAppWebhookRequest.Contact> contacts = value.getContacts();
+        if (contacts != null && !contacts.isEmpty()) {
+            WhatsAppWebhookRequest.Contact contact = contacts.get(0);
             if (contact.getProfile() != null) {
                 userName = contact.getProfile().getName();
             }
         }
 
-        return new MessageContext(
+        MessageContext context = new MessageContext(
                 from,
                 messageId,
                 messageBody,
@@ -38,6 +56,16 @@ public class MessageParser {
                 userName,
                 timestamp
         );
+
+        logger.info(
+                "Parsed message context from webhook: from={} type={} messageId={} timestamp={}",
+                context.getFrom(),
+                context.getMessageType(),
+                context.getMessageId(),
+                context.getTimestamp()
+        );
+
+        return context;
     }
 
     /**
@@ -48,6 +76,7 @@ public class MessageParser {
             return message.getText().getBody();
         }
         // You can expand here for other types, e.g. interactive if you start sending them!
+        logger.debug("Unsupported message type encountered: {}", message.getType());
         return "";
     }
 
