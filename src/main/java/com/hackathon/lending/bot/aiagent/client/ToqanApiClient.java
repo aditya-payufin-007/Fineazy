@@ -62,7 +62,7 @@ public class ToqanApiClient {
                     .uri(URI.create(baseUrl + "/api/create_conversation"))
                     .header("Content-Type", "application/json")
                     .header("Accept", "*/*")
-                    .header("Authorization", "Bearer " + apiKey)
+                    .header("X-Api-Key", apiKey)
                     .timeout(Duration.ofSeconds(timeoutSeconds))
                     .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
