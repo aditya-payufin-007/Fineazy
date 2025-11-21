@@ -114,7 +114,7 @@ public class ToqanApiClient {
             
             HttpResponse<String> response = httpClient.send(httpRequest, 
                     HttpResponse.BodyHandlers.ofString());
-            
+            logger.info("Response Recieved is {}",String.valueOf(response));
             handleResponseStatus(response);
             
             GetAnswerResponse result = objectMapper.readValue(
