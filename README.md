@@ -1,4 +1,8 @@
+> Refer documentation directory for detailed documentations
+
 # WhatsApp Lending Bot
+
+
 
 A Spring Boot-based WhatsApp chatbot for loan application processing, integrated with Meta's WhatsApp Business API.
 
